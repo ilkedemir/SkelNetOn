@@ -148,4 +148,6 @@ for f in os.listdir(dirskel):
     # save labels of points in .seg file
     is_skeleton = np.concatenate((is_skeleton_point, 2 * np.ones(data_skeleton_2.shape[0])))
     np.savetxt(file.replace('.txt', '-labels.seg'), is_skeleton, fmt='%i')
+    
+    os.chdir(dirskel)
 
