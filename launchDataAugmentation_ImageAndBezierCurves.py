@@ -181,7 +181,6 @@ def getAffineTransformation(translation_vec=np.array([0,0]),rotation_angle=0,rot
     T = translationMatrix(imageSpaceToVectorSpace(translation_vec))
     R = rotationMatrix(rotation_angle,imageSpaceToVectorSpace(rotation_center))
     S = scalingMatrix(scaling_ratio)
-    print("A = {}x{}x{}".format(S,R,T))
     return S @ R @ T
 
 ''' -- Data Augmentation '''
@@ -209,9 +208,7 @@ def generateRotatedImages(im,angles,modelname,output_dir):
 
         out_path = "{dir}{shape}_rot{angle}.png".format(dir=output_dir,shape=modelname,angle=rotation_angle)
         cv2.imwrite(out_path,im_rotated_resized);
-        print("Rotation of angle {} : scaling ratio {}".format(rotation_angle,scaling_ratio))
         A = getAffineTransformation(rotation_angle=rotation_angle, rotation_center=rotation_center,scaling_ratio=scaling_ratio)
-        print("A = {}x{} = {}".format(A,T,A @ T))
 
         dict_transformations[out_path]= A @ T
 
@@ -283,11 +280,6 @@ def generateAugmentedImages(fname, output_img_dir, output_transf_dir):
 
     modelname = os.path.basename(fname)[:-4]
     dict_transformations = {}
-
-    A = getAffineTransformation();
-    control_img = "{dir}{shape}_control.png".format(dir=output_img_dir,shape=modelname)
-    cv2.imwrite(control_img,im)
-    dict_transformations[control_img]= A
 
     angles = np.random.random_integers(0,360,Nrotations)
     angles = [0,180]
@@ -366,12 +358,8 @@ def generateTransformedBzSkeleton(transformations_file,initial_skeleton_file):
     bzskel = parseBzskel(initial_skeleton_file)
     transformed_data = {}
     for file,T in transformations.items():
-        print("Transforming bzskel of {} : T = {}".format(file,T))
-        print("Radius_before = {}".format([p[2] for p in bzskel]))
         tbzskel = transformedBezierSkeleton(bzskel,T)
-        print("Radius_after = {}".format([p[2] for p in tbzskel]))
         transformed_data[file] = tbzskel
-        print("")
 
     return transformed_data
 
