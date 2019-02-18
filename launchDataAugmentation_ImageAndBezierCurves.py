@@ -282,7 +282,6 @@ def generateAugmentedImages(fname, output_img_dir, output_transf_dir):
     dict_transformations = {}
 
     angles = np.random.random_integers(0,360,Nrotations)
-    angles = [0,180]
     dict_transformations.update(generateRotatedImages(im,angles,modelname,output_img_dir))
 
     global step_translation
@@ -392,7 +391,7 @@ for model in modelnames:
     count += 1
     print("Shape {} : {} over {}".format(model,count,len(modelnames)))
     input_image_file = input_images_directory + model + ".png"
-    input_bzskel_file = input_bzskel_directory + "bzskeleton_skelpoints_" + model + ".csv"
+    input_bzskel_file = input_bzskel_directory + "skelpoints_" + model + ".csv"
 
     if not os.path.exists(input_image_file):
         print("Could not find file {}".format(input_image_file))
